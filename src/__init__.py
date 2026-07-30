@@ -1,0 +1,1 @@
+"""Handbook AI assistant package."""
