@@ -19,7 +19,7 @@ handbook-ai-assistant/
 - [x] Repo + folders
 - [x] Load PDF / extract text / chunk (Day 1)
 - [x] Embeddings + ChromaDB + retrieve + LLM answer (Day 2)
-- [ ] `POST /ask` API (Day 3)
+- [x] `POST /ask` API (Day 3)
 - [ ] Tests + docs polish (Day 4)
 
 ## Setup
@@ -28,7 +28,7 @@ handbook-ai-assistant/
 cd C:\Users\rejoi\Projects\handbook-ai-assistant
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 copy .env.example .env
 ```
 
@@ -36,19 +36,46 @@ Edit `.env` and set your `OPENAI_API_KEY`.
 
 Put the handbook at `data\handbook.pdf`.
 
-## Day 2 — ingest (embed + store)
+## Ingest (required once, or after PDF changes)
 
 ```powershell
 python src/ingest.py
 ```
 
-First run may download the embedding model. You should see chunks stored in `chroma_db/`.
-
-## Day 2 — ask a question
+## Run the API (Day 3)
 
 ```powershell
-python src/ask.py "What is the attendance requirement?"
-python src/ask.py "What is the cafeteria pizza topping?"
+python -m uvicorn src.api:app --reload
 ```
 
-The second question should return the not-available message (not in the handbook).
+Open docs: http://127.0.0.1:8000/docs
+
+### Example request
+
+```powershell
+curl -X POST http://127.0.0.1:8000/ask -H "Content-Type: application/json" -d "{\"question\": \"When are the live classes?\"}"
+```
+
+### Example response
+
+```json
+{
+  "answer": "...",
+  "source": "Page 11"
+}
+```
+
+Invalid requests return JSON like:
+
+```json
+{
+  "error": "Invalid request. Send JSON like {\"question\": \"Your question here\"}."
+}
+```
+
+## CLI ask (Day 2)
+
+```powershell
+python src/ask.py "When are the live classes?"
+python src/ask.py "What is the cafeteria pizza topping?"
+```
