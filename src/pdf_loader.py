@@ -9,6 +9,8 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
+from src.text_cleanup import normalize_pdf_text
+
 
 def load_pages(pdf_path: str | Path) -> list[dict]:
     """Return a list of {page, text} for every page in the PDF.
@@ -26,7 +28,8 @@ def load_pages(pdf_path: str | Path) -> list[dict]:
     pages: list[dict] = []
 
     for index, page in enumerate(reader.pages):
-        text = page.extract_text() or ""
+        raw = page.extract_text() or ""
+        text = normalize_pdf_text(raw)
         pages.append(
             {
                 "page": index + 1,

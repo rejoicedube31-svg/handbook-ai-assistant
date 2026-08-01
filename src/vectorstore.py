@@ -1,0 +1,95 @@
+"""Persist and search handbook chunk embeddings in ChromaDB.
+
+Why a vector database?
+It stores embeddings and finds the nearest chunks for a question quickly.
+"""
+
+from __future__ import annotations
+
+from pathlib import Path
+
+import chromadb
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_DB_DIR = ROOT / "chroma_db"
+COLLECTION_NAME = "handbook"
+
+
+def get_collection(db_dir: Path = DEFAULT_DB_DIR):
+    """Open (or create) the persistent Chroma collection."""
+    client = chromadb.PersistentClient(path=str(db_dir))
+    return client.get_or_create_collection(
+        name=COLLECTION_NAME,
+        metadata={"hnsw:space": "cosine"},
+    )
+
+
+def reset_collection(db_dir: Path = DEFAULT_DB_DIR):
+    """Delete and recreate the collection (used on fresh ingest)."""
+    client = chromadb.PersistentClient(path=str(db_dir))
+    try:
+        client.delete_collection(COLLECTION_NAME)
+    except Exception:
+        pass
+    return client.get_or_create_collection(
+        name=COLLECTION_NAME,
+        metadata={"hnsw:space": "cosine"},
+    )
+
+
+def store_chunks(
+    chunks: list[dict],
+    embeddings: list[list[float]],
+    db_dir: Path = DEFAULT_DB_DIR,
+) -> int:
+    """Replace the DB contents with these chunks + embeddings."""
+    if len(chunks) != len(embeddings):
+        raise ValueError("chunks and embeddings must be the same length")
+
+    collection = reset_collection(db_dir)
+    if not chunks:
+        return 0
+
+    collection.add(
+        ids=[chunk["chunk_id"] for chunk in chunks],
+        documents=[chunk["text"] for chunk in chunks],
+        metadatas=[{"page": int(chunk["page"])} for chunk in chunks],
+        embeddings=embeddings,
+    )
+    return len(chunks)
+
+
+def search_chunks(
+    query_embedding: list[float],
+    n_results: int = 4,
+    db_dir: Path = DEFAULT_DB_DIR,
+) -> list[dict]:
+    """Return the most similar chunks for a query embedding."""
+    collection = get_collection(db_dir)
+    if collection.count() == 0:
+        return []
+
+    result = collection.query(
+        query_embeddings=[query_embedding],
+        n_results=min(n_results, collection.count()),
+        include=["documents", "metadatas", "distances"],
+    )
+
+    matches: list[dict] = []
+    ids = result.get("ids", [[]])[0]
+    documents = result.get("documents", [[]])[0]
+    metadatas = result.get("metadatas", [[]])[0]
+    distances = result.get("distances", [[]])[0]
+
+    for chunk_id, document, metadata, distance in zip(
+        ids, documents, metadatas, distances
+    ):
+        matches.append(
+            {
+                "chunk_id": chunk_id,
+                "text": document,
+                "page": int(metadata.get("page", 0)),
+                "distance": float(distance),
+            }
+        )
+    return matches
