@@ -1,0 +1,73 @@
+# Capstone plan (branch: `capstone`)
+
+Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
+
+## Day 1 status — done
+
+- [x] Work on `capstone` branch (keeps `main` as previous submission)
+- [x] Handbook PDF still loads (26 pages)
+- [x] ZAIO crawl scope defined (seed URLs below)
+
+## Knowledge sources
+
+| Source | Type | Metadata |
+|--------|------|----------|
+| Student Handbook | PDF `data/handbook.pdf` | `source=Handbook`, `page=N` |
+| ZAIO website | https://www.zaio.io | `source=Website`, `url=...` |
+
+## Website crawl scope (seed URLs)
+
+Crawl these public pages first (enough for course / FAQ / financing questions). Skip login, external apps, and social links.
+
+### Core
+- https://www.zaio.io/
+- https://www.zaio.io/bootcamps
+- https://www.zaio.io/compare-courses
+- https://www.zaio.io/tuition-financing
+- https://www.zaio.io/aboutus
+- https://www.zaio.io/community
+- https://www.zaio.io/qualifications
+
+### Bootcamp detail pages
+- https://www.zaio.io/fullstack-ai-engineer-bootcamp
+- https://www.zaio.io/cloud-devops-engineer-bootcamp
+- https://www.zaio.io/fullstack-bootcamp
+- https://www.zaio.io/datascience-bootcamp
+- https://www.zaio.io/cybersecurity-bootcamp
+- https://www.zaio.io/digital-marketing-bootcamp
+
+### Useful extras
+- https://www.zaio.io/company
+- https://www.zaio.io/learner-stories
+- https://www.zaio.io/events
+- https://www.zaio.io/refundPolicy
+- https://www.zaio.io/terms
+
+### Out of scope (Day 2+)
+- https://www.zaio.io/app/login (auth)
+- https://applications.zaio.io/* (separate app)
+- Social / Trustpilot / mailto links
+
+## Exact not-found message (Capstone)
+
+```text
+I could not find that information in the available knowledge base.
+```
+
+## Remaining program
+
+| Day | Date | Focus |
+|-----|------|--------|
+| 2 | 17 Aug | Crawl + extract website text |
+| 3 | 18 Aug | Clean web content |
+| 4 | 19 Aug | Unified chunks + metadata |
+| 5 | 20 Aug | Embed into one Chroma DB |
+| 6 | 21 Aug | Retrieve + refuse message + source format |
+| 7 | 22 Aug | Update `POST /ask` |
+| 8 | 23 Aug | Unit tests |
+| 9 | 24 Aug | Manual test results |
+| 10 | 25 Aug | n8n workflow |
+| 11 | 26 Aug | README + export n8n JSON |
+| 12 | 27 Aug | Loom 5–10 min |
+| 13 | 28 Aug | Buffer / final push |
+| — | 29 Aug | Due |
