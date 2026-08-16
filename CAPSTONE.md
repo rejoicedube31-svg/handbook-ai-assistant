@@ -8,6 +8,14 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Handbook PDF still loads (26 pages)
 - [x] ZAIO crawl scope defined (seed URLs below)
 
+## Day 2 status — done
+
+- [x] Crawl seed URLs with `httpx` + BeautifulSoup
+- [x] Extract title + text (script/style removed)
+- [x] Save raw crawl to `data/website_raw.json` (gitignored)
+- [x] Drop empty JS-shell routes from seed list (community, cloud-devops detail, refund)
+- [ ] Deeper clean nav/header/footer (Day 3)
+
 ## Knowledge sources
 
 | Source | Type | Metadata |

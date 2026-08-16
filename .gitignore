@@ -10,8 +10,9 @@ __pycache__/
 .env
 .env.local
 
-# Local data & vector store (Day 2+)
+# Local data & vector store
 data/*.pdf
+data/website_raw.json
 !data/.gitkeep
 chroma_db/
 

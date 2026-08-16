@@ -11,10 +11,8 @@ SEED_URLS: list[str] = [
     "https://www.zaio.io/compare-courses",
     "https://www.zaio.io/tuition-financing",
     "https://www.zaio.io/aboutus",
-    "https://www.zaio.io/community",
     "https://www.zaio.io/qualifications",
     "https://www.zaio.io/fullstack-ai-engineer-bootcamp",
-    "https://www.zaio.io/cloud-devops-engineer-bootcamp",
     "https://www.zaio.io/fullstack-bootcamp",
     "https://www.zaio.io/datascience-bootcamp",
     "https://www.zaio.io/cybersecurity-bootcamp",
@@ -22,9 +20,12 @@ SEED_URLS: list[str] = [
     "https://www.zaio.io/company",
     "https://www.zaio.io/learner-stories",
     "https://www.zaio.io/events",
-    "https://www.zaio.io/refundPolicy",
     "https://www.zaio.io/terms",
 ]
+
+# These routes returned an empty JS shell with httpx (no server-rendered text):
+# /community, /cloud-devops-engineer-bootcamp, /refundPolicy
+# Cloud/DevOps is still covered via /bootcamps and /compare-courses.
 
 # Hosts / path prefixes we will not crawl.
 SKIP_PREFIXES: tuple[str, ...] = (
