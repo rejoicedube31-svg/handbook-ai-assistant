@@ -14,7 +14,13 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Extract title + text (script/style removed)
 - [x] Save raw crawl to `data/website_raw.json` (gitignored)
 - [x] Drop empty JS-shell routes from seed list (community, cloud-devops detail, refund)
-- [ ] Deeper clean nav/header/footer (Day 3)
+
+## Day 3 status — done
+
+- [x] Prefer `<main>` content; drop `header` / `footer` / `nav`
+- [x] Strip leftover chrome phrases (newsletter, repeated footer)
+- [x] Save cleaned pages to `data/website_clean.json`
+- [x] Unit tests in `tests/test_web_cleaner.py`
 
 ## Knowledge sources
 
