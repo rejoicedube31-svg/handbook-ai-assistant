@@ -14,6 +14,7 @@ __pycache__/
 data/*.pdf
 data/website_raw.json
 data/website_clean.json
+data/knowledge_chunks.json
 !data/.gitkeep
 chroma_db/
 

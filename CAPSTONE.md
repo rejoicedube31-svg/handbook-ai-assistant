@@ -22,6 +22,13 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Save cleaned pages to `data/website_clean.json`
 - [x] Unit tests in `tests/test_web_cleaner.py`
 
+## Day 4 status — done
+
+- [x] Unified chunking for Handbook + Website
+- [x] Metadata: `source`, `page` (handbook), `url` (website)
+- [x] Combined output saved to `data/knowledge_chunks.json`
+- [ ] Embed all chunks into one Chroma DB (Day 5)
+
 ## Knowledge sources
 
 | Source | Type | Metadata |

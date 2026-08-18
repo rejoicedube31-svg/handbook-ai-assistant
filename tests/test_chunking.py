@@ -15,7 +15,7 @@ def test_chunks_keep_page_numbers():
     assert len(chunks) > 0
     assert all("text" in chunk and "page" in chunk and "chunk_id" in chunk for chunk in chunks)
     assert {chunk["page"] for chunk in chunks} == {7, 11}
-    assert chunks[0]["chunk_id"].startswith("p7_c")
+    assert chunks[0]["chunk_id"].startswith("handbook_p7_c")
 
 
 def test_skips_empty_pages():
