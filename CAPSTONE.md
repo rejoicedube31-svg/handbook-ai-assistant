@@ -27,7 +27,12 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Unified chunking for Handbook + Website
 - [x] Metadata: `source`, `page` (handbook), `url` (website)
 - [x] Combined output saved to `data/knowledge_chunks.json`
-- [ ] Embed all chunks into one Chroma DB (Day 5)
+
+## Day 5 status — done
+
+- [x] Embed handbook + website chunks into one Chroma collection
+- [x] Store metadata: source, page, URL
+- [ ] Retrieve + refuse message + source format (Day 6)
 
 ## Knowledge sources
 

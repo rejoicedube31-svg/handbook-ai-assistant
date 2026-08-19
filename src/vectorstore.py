@@ -1,7 +1,6 @@
-"""Persist and search handbook chunk embeddings in ChromaDB.
+"""Persist and search knowledge-base embeddings in ChromaDB.
 
-Why a vector database?
-It stores embeddings and finds the nearest chunks for a question quickly.
+Capstone: one collection holds Handbook + Website chunks, each with metadata.
 """
 
 from __future__ import annotations
@@ -12,7 +11,7 @@ import chromadb
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB_DIR = ROOT / "chroma_db"
-COLLECTION_NAME = "handbook"
+COLLECTION_NAME = "knowledge_base"
 
 
 def get_collection(db_dir: Path = DEFAULT_DB_DIR):
@@ -37,6 +36,16 @@ def reset_collection(db_dir: Path = DEFAULT_DB_DIR):
     )
 
 
+def chunk_to_metadata(chunk: dict) -> dict:
+    """Chroma only accepts str/int/float/bool — never None."""
+    page = chunk.get("page")
+    return {
+        "source": str(chunk.get("source") or ""),
+        "page": int(page) if page is not None else 0,
+        "url": str(chunk.get("url") or ""),
+    }
+
+
 def store_chunks(
     chunks: list[dict],
     embeddings: list[list[float]],
@@ -53,7 +62,7 @@ def store_chunks(
     collection.add(
         ids=[chunk["chunk_id"] for chunk in chunks],
         documents=[chunk["text"] for chunk in chunks],
-        metadatas=[{"page": int(chunk["page"])} for chunk in chunks],
+        metadatas=[chunk_to_metadata(chunk) for chunk in chunks],
         embeddings=embeddings,
     )
     return len(chunks)
@@ -84,11 +93,15 @@ def search_chunks(
     for chunk_id, document, metadata, distance in zip(
         ids, documents, metadatas, distances
     ):
+        metadata = metadata or {}
+        page_value = metadata.get("page", 0)
         matches.append(
             {
                 "chunk_id": chunk_id,
                 "text": document,
-                "page": int(metadata.get("page", 0)),
+                "source": metadata.get("source") or "",
+                "page": int(page_value) if page_value else None,
+                "url": metadata.get("url") or "",
                 "distance": float(distance),
             }
         )
