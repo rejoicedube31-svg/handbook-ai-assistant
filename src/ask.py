@@ -1,4 +1,4 @@
-"""Day 2 ask CLI: question → retrieve → generate → print answer + source."""
+"""Ask CLI: question → retrieve (both sources) → generate → answer + source."""
 
 from __future__ import annotations
 
@@ -10,11 +10,11 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.generate import NOT_AVAILABLE, generate_answer
-from src.retrieve import best_source_page, format_context, retrieve
+from src.retrieve import best_source, format_context, retrieve
 
 
 def ask(question: str) -> dict:
-    """Full RAG path used later by the API as well."""
+    """Full RAG path used by the API as well."""
     chunks = retrieve(question)
     context = format_context(chunks)
     answer = generate_answer(question, context)
@@ -22,7 +22,7 @@ def ask(question: str) -> dict:
     if answer.strip() == NOT_AVAILABLE:
         source = None
     else:
-        source = best_source_page(chunks)
+        source = best_source(chunks)
 
     return {
         "answer": answer,

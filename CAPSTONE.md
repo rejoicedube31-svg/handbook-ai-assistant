@@ -32,7 +32,13 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 
 - [x] Embed handbook + website chunks into one Chroma collection
 - [x] Store metadata: source, page, URL
-- [ ] Retrieve + refuse message + source format (Day 6)
+
+## Day 6 status — done
+
+- [x] Retrieve across handbook + website
+- [x] Capstone not-found message
+- [x] Source format: `Student Handbook - Page N` or website URL
+- [ ] Update `POST /ask` response polish (Day 7)
 
 ## Knowledge sources
 

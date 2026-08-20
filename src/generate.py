@@ -1,8 +1,8 @@
-"""Generate an answer from retrieved handbook context using an LLM.
+"""Generate an answer from retrieved knowledge-base context using an LLM.
 
 Rules:
-- Only answer from the provided context.
-- If the context is missing or insufficient, return the fixed not-available message.
+- Only answer from the provided context (handbook and/or website).
+- If the context is missing or insufficient, return the Capstone not-found message.
 """
 
 from __future__ import annotations
@@ -13,14 +13,15 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 NOT_AVAILABLE = (
-    "I'm sorry, I don't have that information in the student handbook."
+    "I could not find that information in the available knowledge base."
 )
 
-SYSTEM_PROMPT = """You are a student handbook assistant.
+SYSTEM_PROMPT = """You are a helpful assistant for ZAIO students.
 Answer ONLY using the CONTEXT provided by the user.
+The context may come from the Student Handbook and/or the ZAIO website.
 If the context does not contain enough information to answer, reply exactly with:
-I'm sorry, I don't have that information in the student handbook.
-Do not invent policies, dates, fees, or rules.
+I could not find that information in the available knowledge base.
+Do not invent policies, courses, dates, fees, or rules.
 Keep answers clear and concise.
 """
 

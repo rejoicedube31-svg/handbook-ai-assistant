@@ -18,7 +18,7 @@ def test_ask_success(monkeypatch):
         "src.api.ask",
         lambda _q: {
             "answer": "Orientation Day is on 15 January 2026 at 10 am.",
-            "source": "Page 7",
+            "source": "Student Handbook - Page 7",
             "chunks_used": 2,
         },
     )
@@ -26,7 +26,7 @@ def test_ask_success(monkeypatch):
     assert response.status_code == 200
     body = response.json()
     assert body["answer"].startswith("Orientation Day")
-    assert body["source"] == "Page 7"
+    assert body["source"] == "Student Handbook - Page 7"
 
 
 def test_ask_rejects_missing_question():
