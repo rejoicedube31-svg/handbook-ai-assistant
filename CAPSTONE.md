@@ -38,7 +38,14 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Retrieve across handbook + website
 - [x] Capstone not-found message
 - [x] Source format: `Student Handbook - Page N` or website URL
-- [ ] Update `POST /ask` response polish (Day 7)
+
+## Day 7 status — done
+
+- [x] Update `POST /ask` for Capstone response shapes
+- [x] Health endpoint lists both knowledge sources
+- [x] API tests for handbook URL / website / not-found
+- [ ] Broader unit tests polish (Day 8)
+
 
 ## Knowledge sources
 

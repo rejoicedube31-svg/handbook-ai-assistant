@@ -1,38 +1,39 @@
-# Handbook AI Assistant
+# Handbook AI Assistant (Capstone)
 
-RAG assistant that answers student questions from the Zaio handbook PDF.
+RAG assistant that answers student questions from:
+- the **Student Handbook** PDF
+- the **ZAIO website** (https://www.zaio.io)
 
-**Stack:** Python · Sentence Transformers · ChromaDB · OpenAI · FastAPI
+**Stack:** Python · Sentence Transformers · ChromaDB · OpenAI · FastAPI · BeautifulSoup
 
-## Features (rubric)
+Branch: `capstone`
+
+## Capstone features
 
 | Part | Feature | Status |
 |------|---------|--------|
-| 1 | Load PDF, extract, chunk, embed, store in vector DB | Done |
-| 2 | Retrieve relevant chunks and generate an LLM answer | Done |
-| 3 | `POST /ask` JSON API | Done |
-| 4 | Manual tests + unit tests | Done |
-| 5 | JSON in/out + graceful invalid requests (n8n-ready) | Done |
+| 1 | Handbook + website crawl/clean/chunk/embed in one vector DB | Done |
+| 2 | Retrieve across both sources; refuse if not found | Done |
+| 3 | `POST /ask` returns handbook page **or** website URL as `source` | Done |
+| 4 | Unit tests + test results | In progress (Day 8–9) |
+| 5 | n8n workflow | Day 10 |
 
 ## Project layout
 
 ```text
 handbook-ai-assistant/
-├── data/handbook.pdf     ← your handbook (gitignored)
-├── chroma_db/            ← vector store (gitignored)
+├── data/handbook.pdf          ← handbook (gitignored)
+├── data/website_clean.json    ← cleaned crawl (gitignored)
+├── chroma_db/                 ← vector store (gitignored)
 ├── src/
-│   ├── pdf_loader.py
-│   ├── text_cleanup.py
-│   ├── chunking.py
-│   ├── embeddings.py
-│   ├── vectorstore.py
-│   ├── retrieve.py
-│   ├── generate.py
-│   ├── ask.py
+│   ├── web_crawler.py / web_cleaner.py / web_config.py
+│   ├── knowledge_base.py
+│   ├── pdf_loader.py, chunking.py, embeddings.py, vectorstore.py
+│   ├── retrieve.py, generate.py, ask.py
 │   ├── ingest.py
 │   └── api.py
 ├── tests/
-├── TEST-RESULTS.md
+├── CAPSTONE.md
 ├── requirements.txt
 └── README.md
 ```
@@ -41,6 +42,7 @@ handbook-ai-assistant/
 
 ```powershell
 cd C:\Users\rejoi\Projects\handbook-ai-assistant
+git checkout capstone
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -50,13 +52,15 @@ copy .env.example .env
 1. Put the handbook at `data\handbook.pdf`
 2. Edit `.env` and set `OPENAI_API_KEY`
 
-## Ingest the handbook
+## Build the knowledge base
 
 ```powershell
+# Crawl + clean ZAIO website
+python src/web_crawler.py
+
+# Chunk handbook + website, embed, store in one Chroma DB
 python src/ingest.py
 ```
-
-Creates embeddings and stores them in `chroma_db/`. Re-run after changing the PDF.
 
 ## Run the API
 
@@ -65,7 +69,7 @@ python -m uvicorn src.api:app --reload
 ```
 
 - Health: http://127.0.0.1:8000/
-- Interactive docs: http://127.0.0.1:8000/docs
+- Docs: http://127.0.0.1:8000/docs
 
 ### `POST /ask`
 
@@ -73,41 +77,50 @@ Request:
 
 ```json
 {
-  "question": "When are the live classes?"
+  "question": "What courses does ZAIO offer?"
 }
 ```
 
-Response:
+Website response example:
 
 ```json
 {
-  "answer": "Live classes are scheduled for Thursdays from 6 pm to 8 pm and Tuesdays from 9 am to 11 am for the first 12 weeks...",
-  "source": "Page 11"
+  "answer": "...",
+  "source": "https://www.zaio.io/bootcamps"
 }
 ```
 
-PowerShell example:
-
-```powershell
-Invoke-RestMethod -Method POST -Uri http://127.0.0.1:8000/ask -ContentType "application/json" -Body '{"question":"When are the live classes?"}' | ConvertTo-Json
-```
-
-Invalid request (missing `question`) returns HTTP 400:
+Handbook response example:
 
 ```json
 {
-  "error": "Invalid request. Send JSON like {\"question\": \"Your question here\"}."
+  "answer": "...",
+  "source": "Student Handbook - Page 18"
 }
 ```
 
-If the answer is not in the handbook, the assistant returns:
+Not found:
 
-> I'm sorry, I don't have that information in the student handbook.
+```json
+{
+  "answer": "I could not find that information in the available knowledge base.",
+  "source": null
+}
+```
 
-## CLI (optional)
+PowerShell:
 
 ```powershell
-python src/ask.py "When is orientation day?"
+Invoke-RestMethod -Method POST -Uri http://127.0.0.1:8000/ask -ContentType "application/json" -Body '{"question":"What courses does ZAIO offer?"}' | ConvertTo-Json
+```
+
+Invalid request (missing `question`) → HTTP 400 JSON `error`.
+
+## CLI
+
+```powershell
+python src/ask.py "When are the live classes?"
+python src/ask.py "What courses does ZAIO offer?"
 ```
 
 ## Tests
@@ -116,10 +129,8 @@ python src/ask.py "When is orientation day?"
 python -m pytest -q
 ```
 
-Manual Q&A table: see [TEST-RESULTS.md](TEST-RESULTS.md).
-
 ## Notes for markers / n8n
 
 - API accepts and returns JSON only
-- Invalid bodies are rejected with a clear JSON error (ready for the next n8n practical)
-- `source` is `null` when the assistant cannot answer from the handbook
+- Invalid bodies get a clear JSON error
+- `source` is a handbook citation, a website URL, or `null` when not found

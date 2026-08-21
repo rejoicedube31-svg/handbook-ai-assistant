@@ -1,4 +1,4 @@
-"""Day 3 API: POST /ask for handbook questions (n8n-ready JSON).
+"""Capstone API: POST /ask for handbook + ZAIO website questions (n8n-ready JSON).
 
 Why FastAPI?
 - Accepts/returns JSON easily (Part 5 / n8n prep)
@@ -22,14 +22,21 @@ if str(ROOT) not in sys.path:
 from src.ask import ask
 
 app = FastAPI(
-    title="Handbook AI Assistant",
-    description="Ask questions about the student handbook.",
-    version="0.1.0",
+    title="Handbook AI Assistant (Capstone)",
+    description=(
+        "Ask questions answered from the Student Handbook PDF and the ZAIO website. "
+        "Returns answer + source (handbook page or website URL)."
+    ),
+    version="0.2.0",
 )
 
 
 class AskRequest(BaseModel):
-    question: str = Field(..., description="The student's question")
+    question: str = Field(
+        ...,
+        description="The student's question",
+        examples=["What courses does ZAIO offer?"],
+    )
 
     @field_validator("question")
     @classmethod
@@ -41,13 +48,22 @@ class AskRequest(BaseModel):
 
 
 class AskResponse(BaseModel):
-    answer: str
-    source: str | None = None
+    answer: str = Field(
+        ...,
+        description="Generated answer, or the Capstone not-found message",
+    )
+    source: str | None = Field(
+        default=None,
+        description=(
+            'Citation: website URL (e.g. "https://www.zaio.io/...") '
+            'or "Student Handbook - Page N". Null when not found.'
+        ),
+    )
 
 
 @app.exception_handler(RequestValidationError)
 async def invalid_request_handler(_request, _exc: RequestValidationError):
-    """Part 5: handle invalid requests gracefully with JSON."""
+    """Handle invalid requests gracefully with JSON (n8n-ready)."""
     return JSONResponse(
         status_code=400,
         content={
@@ -59,17 +75,44 @@ async def invalid_request_handler(_request, _exc: RequestValidationError):
 @app.get("/")
 def health():
     """Simple health check so you can confirm the server is up."""
-    return {"status": "ok", "message": "Handbook AI Assistant is running"}
+    return {
+        "status": "ok",
+        "message": "Handbook AI Assistant Capstone API is running",
+        "sources": ["Student Handbook", "ZAIO Website"],
+    }
 
 
 @app.post("/ask", response_model=AskResponse)
 def ask_endpoint(payload: AskRequest) -> AskResponse:
     """
-    Example request:
-    {"question": "When are the live classes?"}
+    Ask a question against the Student Handbook and ZAIO website.
 
-    Example response:
-    {"answer": "...", "source": "Page 11"}
+    Example request:
+    ```json
+    {"question": "What courses does ZAIO offer?"}
+    ```
+
+    Example responses:
+    ```json
+    {
+      "answer": "...",
+      "source": "https://www.zaio.io/bootcamps"
+    }
+    ```
+    or
+    ```json
+    {
+      "answer": "...",
+      "source": "Student Handbook - Page 18"
+    }
+    ```
+    or (not found):
+    ```json
+    {
+      "answer": "I could not find that information in the available knowledge base.",
+      "source": null
+    }
+    ```
     """
     result = ask(payload.question)
     return AskResponse(answer=result["answer"], source=result["source"])
