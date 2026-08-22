@@ -1,6 +1,7 @@
-"""Unit tests for Capstone unified chunk metadata."""
+"""Unit tests for Capstone unified chunk metadata and knowledge helpers."""
 
 from src.chunking import SOURCE_HANDBOOK, SOURCE_WEBSITE, chunk_pages, chunk_website_pages
+from src.knowledge_base import summarize_chunks
 
 
 def test_handbook_chunks_include_source_and_page():
@@ -35,3 +36,13 @@ def test_website_skips_short_pages():
     ]
     chunks = chunk_website_pages(pages, min_chars=200)
     assert chunks == []
+
+
+def test_summarize_chunks_counts_both_sources():
+    chunks = [
+        {"source": SOURCE_HANDBOOK, "text": "a"},
+        {"source": SOURCE_HANDBOOK, "text": "b"},
+        {"source": SOURCE_WEBSITE, "text": "c"},
+    ]
+    stats = summarize_chunks(chunks)
+    assert stats == {"total": 3, "handbook": 2, "website": 1}

@@ -44,7 +44,11 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 - [x] Update `POST /ask` for Capstone response shapes
 - [x] Health endpoint lists both knowledge sources
 - [x] API tests for handbook URL / website / not-found
-- [ ] Broader unit tests polish (Day 8)
+
+## Day 8 status — done
+
+- [x] Broader Capstone unit tests (crawler, retrieve merge/boost, vectorstore roundtrip)
+- [ ] Manual test results table (Day 9)
 
 
 ## Knowledge sources
