@@ -48,7 +48,12 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 ## Day 8 status — done
 
 - [x] Broader Capstone unit tests (crawler, retrieve merge/boost, vectorstore roundtrip)
-- [ ] Manual test results table (Day 9)
+
+## Day 9 status — done
+
+- [x] Manual test table: handbook, website, and unanswerable questions
+- [x] Updated `TEST-RESULTS.md` with Question / Source / Answer
+- [ ] n8n workflow (Day 10)
 
 
 ## Knowledge sources

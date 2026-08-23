@@ -15,7 +15,7 @@ Branch: `capstone`
 | 1 | Handbook + website crawl/clean/chunk/embed in one vector DB | Done |
 | 2 | Retrieve across both sources; refuse if not found | Done |
 | 3 | `POST /ask` returns handbook page **or** website URL as `source` | Done |
-| 4 | Unit tests + test results | In progress (Day 8–9) |
+| 4 | Unit tests + test results | Done (Day 8–9) |
 | 5 | n8n workflow | Day 10 |
 
 ## Project layout
