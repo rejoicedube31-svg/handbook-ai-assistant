@@ -184,6 +184,8 @@ Flow: **Webhook → validate → POST /ask → Discord → JSON response**
 
 Speaking guide: [`LOOM-SCRIPT.md`](LOOM-SCRIPT.md) (target 5–10 minutes)
 
+Final submit checklist: [`SUBMIT-CHECKLIST.md`](SUBMIT-CHECKLIST.md)
+
 ---
 
 ## Submit

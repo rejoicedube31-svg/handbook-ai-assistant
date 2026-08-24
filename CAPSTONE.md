@@ -63,7 +63,12 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 
 - [x] Submission-ready README polish
 - [x] Loom speaking script (`LOOM-SCRIPT.md`, 5–10 min)
-- [ ] Record Loom + final buffer/push (Day 12–13)
+
+## Day 12 status — done
+
+- [x] Final verify: 39 tests passed, deliverables on `capstone`
+- [x] `SUBMIT-CHECKLIST.md` for Loom + portal upload
+- [ ] Record Loom + submit by **29 Aug** (buffer **28 Aug**)
 
 
 ## Knowledge sources
