@@ -53,7 +53,17 @@ Due: **29 Aug 2026** · Target ready: **28 Aug** (1 day spare)
 
 - [x] Manual test table: handbook, website, and unanswerable questions
 - [x] Updated `TEST-RESULTS.md` with Question / Source / Answer
-- [ ] n8n workflow (Day 10)
+
+## Day 10 status — done
+
+- [x] n8n workflow: webhook → validate → `POST /ask` → Discord → JSON response
+- [x] Workflow JSON + setup guide in `n8n/`
+
+## Day 11 status — done
+
+- [x] Submission-ready README polish
+- [x] Loom speaking script (`LOOM-SCRIPT.md`, 5–10 min)
+- [ ] Record Loom + final buffer/push (Day 12–13)
 
 
 ## Knowledge sources
